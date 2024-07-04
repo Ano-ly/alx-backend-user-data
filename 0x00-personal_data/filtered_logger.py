@@ -8,12 +8,11 @@ from typing import List, Sequence
 PII_FIELDS = ("phone", "ssn", "password", "ip", "email")
 
 
-def filter_datum(fields: Sequence[str], redaction: str,
-                 message: str, separator: str) -> str:
+def filter_datum(fields: Sequence[str], redaction: str, message: str, separator: str) -> str:
     """Obfuscate important personal data"""
     for field in fields:
-        return (re.sub(f"{field}=[^{separator}]+{separator}",
-                       f"{field}={redaction}{separator}", message))
+        message = re.sub(f"{field}=[^{separator}]+{separator}", f"{field}={redaction}{separator}", message)
+    return (message)
 
 
 class RedactingFormatter(logging.Formatter):
@@ -25,7 +24,7 @@ class RedactingFormatter(logging.Formatter):
     SEPARATOR = ";"
 
     def __init__(self, fields: Sequence[str]):
-        """Initialise instance
+        """Initialise instance"""
         super(RedactingFormatter, self).__init__(self.FORMAT)
         self.fields = fields
 
