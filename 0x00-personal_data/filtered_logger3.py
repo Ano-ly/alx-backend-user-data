@@ -5,8 +5,6 @@ import re
 from typing import List, Sequence
 
 
-PII_FIELDS = ("phone", "ssn", "password", "ip", "email")
-
 def filter_datum(fields: List[str], redaction: str,
                  message: str, separator: str):
     """Obfuscate important personal data"""
@@ -34,12 +32,3 @@ class RedactingFormatter(logging.Formatter):
         return (super(RedactingFormatter, self).format(record))
 
 
-def get_logger() -> logging.Logger:
-    """Return new Logger object instance"""
-    new_logger = logging.getLogger("user_data")
-    new_logger.setLevel(logging.INFO)
-    new_logger.propagate = False
-    new_handler = logging.StreamHandler()
-    new_handler.setFormatter(RedactingFormatter(PII_FIELDS))
-    new_logger.addHandler(new_handler)
-    return (new_logger)
