@@ -7,12 +7,13 @@ from typing import List, Sequence
 
 PII_FIELDS = ("phone", "ssn", "password", "ip", "email")
 
+
 def filter_datum(fields: List[str], redaction: str,
                  message: str, separator: str):
     """Obfuscate important personal data"""
     for field in fields:
-        message = re.sub(f"{field}=[^{separator}]+{separator}", f"{field}={redaction}{separator}", message)
-    return(message)
+        return (re.sub(f"{field}=[^{separator}]+{separator}",
+                       f"{field}={redaction}{separator}", message))
 
 
 class RedactingFormatter(logging.Formatter):
@@ -28,9 +29,9 @@ class RedactingFormatter(logging.Formatter):
         self.fields = fields
 
     def format(self, record: logging.LogRecord) -> str:
-        """Format a record""" 
-        new_str = filter_datum(self.fields, self.REDACTION, record.msg, self.SEPARATOR)
-        record.msg = new_str
+        """Format a record"""
+        record.msg = filter_datum(self.fields, self.REDACTION,
+                                  record.msg, self.SEPARATOR)
         return (super(RedactingFormatter, self).format(record))
 
 
