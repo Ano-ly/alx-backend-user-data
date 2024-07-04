@@ -11,7 +11,7 @@ PII_FIELDS = ("phone", "ssn", "password", "ip", "email")
 def filter_datum(fields: Sequence[str], redaction: str, message: str, separator: str) -> str:
     """Obfuscate important personal data"""
     for field in fields:
-        message = re.sub(f"{field}=[^{separator}]+{separator}", f"{field}={redaction}{separator}", message)
+        message = re.sub(rf"{field}=[^{separator}]+{separator}", rf"{field}={redaction}{separator}", message)
     return (message)
 
 
