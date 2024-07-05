@@ -8,7 +8,7 @@ from typing import List, Sequence
 PII_FIELDS = ("phone", "ssn", "password", "ip", "email")
 
 
-def filter_datum(fields: Sequence[str], redaction: str,
+def filter_datum(fields: List[str], redaction: str,
                  message: str, separator: str) -> str:
     """Obfuscate important personal data"""
     for field in fields:
