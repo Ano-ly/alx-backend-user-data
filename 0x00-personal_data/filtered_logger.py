@@ -5,7 +5,7 @@ import re
 from typing import List, Sequence
 
 
-PII_FIELDS = ("phone", "ssn", "password", "ip", "email")
+PII_FIELDS = ("phone", "ssn", "password", "ip", "name")
 
 
 def filter_datum(fields: List[str], redaction: str,
