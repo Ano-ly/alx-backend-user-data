@@ -1,6 +1,8 @@
 #!/usr/bin/env python3
 """Filter datum function"""
 import logging
+import mysql.connector
+import os
 import re
 from typing import List, Sequence
 
@@ -46,3 +48,18 @@ def get_logger() -> logging.Logger:
     new_handler.setFormatter(RedactingFormatter(PII_FIELDS))
     new_logger.addHandler(new_handler)
     return (new_logger)
+
+
+def get_db() -> mysql.connector.connection.MySQLConnection:
+    """Connect to a protected sql database"""
+    uname = os.environ.get("PERSONAL_DATA_DB_USERNAME", "root")
+    pw = os.environ.get("PERSONAL_DATA_DB_PASSWORD", "")
+    host = os.environ.get("PERSONAL_DATA_DB_HOST", "localhost")
+    dbname = os.environ.get("PERSONAL_DATA_DB_NAME")
+
+    connect = f"server={host};user={uname};database={dbname};\
+port=3306;password={pw}"
+    return (mysql.connector.connect(host=host,
+                                    user=uname,
+                                    database=dbname,
+                                    password=pw))
