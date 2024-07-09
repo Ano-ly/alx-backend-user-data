@@ -4,5 +4,6 @@ from flask import request
 from typing import List, TypeVar
 from api.vi.auth.auth import Auth
 
+
 class BasicAuth(Auth):
     pass
