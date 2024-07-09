@@ -31,3 +31,10 @@ def raise_unauth():
     """ Raise error when endpoint access attempted
     """
     abort(401)
+
+
+@app_views.route('/forbidden', strict_slashes=False)
+def raise_forbidden():
+    """ Raise error when endpoint access attempted
+    """
+    abort(403)
