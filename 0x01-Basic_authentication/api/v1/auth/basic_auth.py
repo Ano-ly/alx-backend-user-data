@@ -1,9 +1,10 @@
 #!/usr/bin/env python3
 """Authorization class for API"""
 import base64
-from flask import request
-from typing import List, TypeVar
 from api.v1.auth.auth import Auth
+from flask import request
+from models.user import User
+from typing import List, TypeVar
 
 
 class BasicAuth(Auth):
@@ -49,4 +50,18 @@ class BasicAuth(Auth):
         info = decoded_base64_authorization_header.split(':')
         return (info[0], info[1])
 
-
+    def user_object_from_credentials(
+            self, user_email: str, user_pwd: str) -> TypeVar('User'):
+        """Obtain user's identity using credentials"""
+        if user_email is None or type(user_email) != str:
+            return (None)
+        if user_pwd is None or type(user_email) != str:
+            return (None)
+        result = User.search({'email': user_email})
+        if len(result) == 0:
+            return (None)
+        else:
+            the_user = result[0]
+            if the_user.is_valid_password(user_pwd):
+                return (the_user)
+            return (None)
