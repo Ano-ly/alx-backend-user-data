@@ -1,10 +1,11 @@
 #!/usr/bin/env python3
-"""Auth class
-"""
+"""Authorization class for API"""
 import request from Flask
 
 
 class Auth:
+    """Authentication class for API"""
+
     def require_auth(self, path: str, excluded_paths: List[str]) -> bool:
         """Check if path requires authentication for access
         """
