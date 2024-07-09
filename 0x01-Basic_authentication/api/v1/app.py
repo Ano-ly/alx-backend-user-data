@@ -24,6 +24,8 @@ if os.getenv('AUTH_TYPE') == 'basic_auth':
 
 @app.before_request
 def auth_b_r():
+    """Check for unauthorized paths
+    """
     if auth is not None:
         blacklist = ['/api/v1/status/',
                      '/api/v1/unauthorized/',
