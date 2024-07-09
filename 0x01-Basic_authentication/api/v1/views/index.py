@@ -24,3 +24,9 @@ def stats() -> str:
     stats = {}
     stats['users'] = User.count()
     return jsonify(stats)
+
+@app_views.route("/api/v1/unauthorized", strict_slashes=False)
+def raise_unauth():
+    """ Raise error when endpoint access attempted
+    """
+    abort(401)
