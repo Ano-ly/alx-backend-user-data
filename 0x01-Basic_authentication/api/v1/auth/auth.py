@@ -20,6 +20,10 @@ class Auth:
             return (False)
         if path not in excluded_paths:
             return (True)
+        for ex_path in excluded_paths:
+            if ex_path[-1] == '*':
+                if ex_path[:-1] in path:
+                    return (False)
 
     def authorization_header(self, request=None) -> str:
         """Authorisation header
