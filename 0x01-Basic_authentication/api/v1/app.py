@@ -29,8 +29,7 @@ def auth_b_r():
     if auth is not None:
         blacklist = ['/api/v1/status/',
                      '/api/v1/unauthorized/',
-                     '/api/v1/forbidden/',
-                     '/api/v1/stat*']
+                     '/api/v1/forbidden/']
         req_auth = auth.require_auth(request.path, blacklist)
         if req_auth is not False:
             if auth.authorization_header(request) is None:
