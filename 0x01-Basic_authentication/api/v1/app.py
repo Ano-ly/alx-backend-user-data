@@ -31,7 +31,7 @@ def auth_b_r():
                      '/api/v1/unauthorized/',
                      '/api/v1/forbidden/']
         req_auth = auth.require_auth(request.path, blacklist)
-        if req_auth is not False:
+        if req_auth is True:
             if auth.authorization_header(request) is None:
                 abort(401)
             if auth.current_user(request) is None:
