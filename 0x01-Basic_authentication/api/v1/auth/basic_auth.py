@@ -59,10 +59,12 @@ class BasicAuth(Auth):
         """Obtain user's identity using credentials"""
         if user_email is None or type(user_email) != str:
             return (None)
-        if user_pwd is None or type(user_email) != str:
+        if user_pwd is None or type(user_pwd) != str:
             return (None)
         result = User.search({'email': user_email})
         if len(result) == 0:
+            return (None)
+        if User.count == 0:
             return (None)
         else:
             the_user = result[0]
