@@ -25,7 +25,6 @@ if os.getenv('AUTH_TYPE') == 'session_auth':
     auth = SessionAuth()
 
 
-
 @app.before_request
 def auth_b_r():
     """Check for unauthorized paths
