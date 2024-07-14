@@ -39,7 +39,7 @@ def view_one_user(user_id: str = None) -> str:
 
 
 @app_views.route('/users/me', methods=['GET'], strict_slashes=False)
-def get_me() -> User:
+def get_me() -> str:
     """Get current Authenticated User Object"""
     return (jsonify(request.current_user.to_json()))
 
