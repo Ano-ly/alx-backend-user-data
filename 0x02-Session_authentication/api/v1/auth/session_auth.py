@@ -24,9 +24,16 @@ class SessionAuth(Auth):
         return (new_id)
 
     def user_id_for_session_id(self, session_id: str = None) -> str:
-        """Obtaint the user_id attached to a session id"""
+        """Obtain the user_id attached to a session id"""
         if session_id is None:
             return (None)
         if type(session_id) != str:
             return (None)
         return (self.user_id_by_session_id.get(session_id))
+
+    def current_user(self, request=None):
+        """Return a user instance based on a cookie value"""
+        ses_kie = self.session_cookie(request)
+        user_id = self.user_id_for_session_id(ses_kie)
+        print(User.get(user_id))
+        return (User.get(user_id))

@@ -41,16 +41,16 @@ class Auth:
         """
         return (None)
 
-    def session_cookie(self, request=None):
+    def session_cookie(self, request=None) -> str:
         """Return cookie value"""
         if request is None:
             return (None)
         session_id_name = os.getenv('SESSION_NAME')
-        cookie_h = request.headers.get('Cookie')
+        cookie_h = str(request.headers.get('Cookie'))
         try:
             cookie_h = cookie_h.split('=')
         except AttributeError:
-            return (None)
+            return ("None")
         if cookie_h[0] == session_id_name:
-            return (cookie_h[1])
-        return (None)
+            return (str(cookie_h[1]))
+        return ("None")
