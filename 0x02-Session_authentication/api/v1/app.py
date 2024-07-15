@@ -32,10 +32,12 @@ def auth_b_r():
     if auth is not None:
         blacklist = ['/api/v1/status/',
                      '/api/v1/unauthorized/',
-                     '/api/v1/forbidden/']
+                     '/api/v1/forbidden/',
+                     '/api/v1/auth_session/login/']
         req_auth = auth.require_auth(request.path, blacklist)
         if req_auth is True:
-            if auth.authorization_header(request) is None:
+            if auth.session_cookie(request) is None\
+             and auth.authorization_header(request) is None:
                 abort(401)
             if auth.current_user(request) is None:
                 abort(403)

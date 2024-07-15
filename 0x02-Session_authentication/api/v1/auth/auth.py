@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 """Authorization class for API"""
 from flask import request
+import os
 from typing import List, TypeVar
 
 
@@ -38,4 +39,18 @@ class Auth:
     def current_user(self, request=None) -> TypeVar('User'):
         """Returns current user
         """
+        return (None)
+
+    def session_cookie(self, request=None):
+        """Return cookie value"""
+        if request is None:
+            return (None)
+        session_id_name = os.getenv('SESSION_NAME')
+        cookie_h = request.headers.get('Cookie')
+        try:
+            cookie_h = cookie_h.split('=')
+        except AttributeError:
+            return (None)
+        if cookie_h[0] == session_id_name:
+            return (cookie_h[1])
         return (None)
