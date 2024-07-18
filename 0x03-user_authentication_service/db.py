@@ -49,7 +49,7 @@ class DB:
             if user_found is None:
                 raise NoResultFound
             else:
-               return (user_found)
+                return (user_found)
 
     def update_user(self, user_id: str, **kwargs: Mapping) -> None:
         """Update user details"""
