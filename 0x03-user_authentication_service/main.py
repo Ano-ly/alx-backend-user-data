@@ -6,7 +6,7 @@ from db import DB
 from user import User
 
 from sqlalchemy.exc import InvalidRequestError
-from sqlalchemy.exc import NoResultFound
+from sqlalchemy.orm.exc import NoResultFound
 
 
 my_db = DB()
@@ -28,3 +28,4 @@ try:
     print(find_user.id)
 except InvalidRequestError:
     print("Invalid")
+

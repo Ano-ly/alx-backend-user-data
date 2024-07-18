@@ -7,6 +7,7 @@ from sqlalchemy.orm import sessionmaker
 from sqlalchemy.orm.session import Session
 from sqlalchemy.exc import InvalidRequestError
 from sqlalchemy.exc import NoResultFound
+from typing import Mapping
 from user import Base, User
 
 
@@ -31,21 +32,26 @@ class DB:
             self.__session = DBSession()
         return self.__session
 
-    def add_user(self, email, hashed_password) -> User:
+    def add_user(self, email: str, hashed_password: str) -> User:
         """Adds a user to the database"""
         new_user = User(email=email, hashed_password=hashed_password)
         self._session.add(new_user)
         self._session.commit()
         return (new_user)
 
-    def find_user_by(self, **kwargs):
+    def find_user_by(self, **kwargs: Mapping) -> User:
         """Find a user by certain attributes"""
-        user_found = self._session.query(User).filter_by(**kwargs).first()
-        if user_found is None:
-            raise NoResultFound
-        return (user_found)
+        try:
+            user_found = self._session.query(User).filter_by(**kwargs).first()
+        except InvalidRequestError:
+            raise InvalidRequestError
+        else:
+            if user_found is None:
+                raise NoResultFound
+            else:
+               return (user_found)
 
-    def update_user(self, user_id, **kwargs) -> None:
+    def update_user(self, user_id: str, **kwargs: Mapping) -> None:
         """Update user details"""
         valid_attr = ['id',
                       'email',
