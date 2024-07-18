@@ -43,3 +43,20 @@ class DB:
         if user_found is None:
             raise NoResultFound
         return (user_found)
+
+    def update_user(self, user_id, **kwargs) -> None:
+        """Update user details"""
+        valid_attr = ['id',
+                      'email',
+                      'hashed_password',
+                      'session_id',
+                      'reset_token']
+        for key in kwargs.keys():
+            if key not in valid_attr:
+                raise ValueError
+            user = self.find_user_by(id=user_id)
+            for k, v in kwargs.items():
+                setattr(user, k, v)
+            self._session.add(user)
+            self._session.commit()
+        return (None)
