@@ -1,31 +1,65 @@
 #!/usr/bin/env python3
+"""DB module
 """
-Main file
-"""
-from db import DB
-from user import User
-
+from sqlalchemy import create_engine
+from sqlalchemy.ext.declarative import declarative_base
+from sqlalchemy.orm import sessionmaker
+from sqlalchemy.orm.session import Session
 from sqlalchemy.exc import InvalidRequestError
-from sqlalchemy.orm.exc import NoResultFound
+from sqlalchemy.exc import NoResultFound
+from typing import Mapping
+from user import Base, User
 
 
-my_db = DB()
+class DB:
+    """DB class
+    """
 
-user = my_db.add_user("test@test.com", "PwdHashed")
-print(user.id)
+    def __init__(self) -> None:
+        """Initialize a new DB instance
+        """
+        self._engine = create_engine("sqlite:///a.db", echo=False)
+        Base.metadata.drop_all(self._engine)
+        Base.metadata.create_all(self._engine)
+        self.__session = None
 
-find_user = my_db.find_user_by(email="test@test.com")
-print(find_user.id)
+    @property
+    def _session(self) -> Session:
+        """Memoized session object
+        """
+        if self.__session is None:
+            DBSession = sessionmaker(bind=self._engine)
+            self.__session = DBSession()
+        return self.__session
 
-try:
-    find_user = my_db.find_user_by(email="test2@test.com")
-    print(find_user.id)
-except NoResultFound:
-    print("Not found")
+    def add_user(self, email: str, hashed_password: str) -> User:
+        """Adds a user to the database"""
+        new_user = User(email=email, hashed_password=hashed_password)
+        self._session.add(new_user)
+        self._session.commit()
+        return (new_user)
 
-try:
-    find_user = my_db.find_user_by(no_email="test@test.com")
-    print(find_user.id)
-except InvalidRequestError:
-    print("Invalid")
+    def find_user_by(self, **kwargs: Mapping) -> User:
+        """Find a user by certain attributes"""
+        user_found = self._session.query(User).filter_by(**kwargs).first()
+        if user_found is None:
+            raise NoResultFound
+        else:
+            return (user_found)
 
+    def update_user(self, user_id: str, **kwargs: Mapping) -> None:
+        """Update user details"""
+        valid_attr = ['id',
+                      'email',
+                      'hashed_password',
+                      'session_id',
+                      'reset_token']
+        for key in kwargs.keys():
+            if key not in valid_attr:
+                raise ValueError
+            user = self.find_user_by(id=user_id)
+            for k, v in kwargs.items():
+                setattr(user, k, v)
+            self._session.add(user)
+            self._session.commit()
+        return (None)
